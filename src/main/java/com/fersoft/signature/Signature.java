@@ -1,5 +1,7 @@
 package com.fersoft.signature;
 
+import lombok.Getter;
+
 import java.math.BigInteger;
 
 /**
@@ -7,7 +9,16 @@ import java.math.BigInteger;
  *
  * @author ferat capar
  */
-public record Signature (BigInteger r,BigInteger s){
+@Getter
+public class Signature {
+
+    private final BigInteger r;
+    private final BigInteger s;
+
+    public Signature(BigInteger r, BigInteger s) {
+        this.r = r;
+        this.s = s;
+    }
 
     @Override
     public String toString() {

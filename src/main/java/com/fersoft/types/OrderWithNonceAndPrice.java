@@ -23,12 +23,12 @@ public class OrderWithNonceAndPrice extends OrderWithNonce {
 
     @Override
     protected RoundingMode getRoundingMode() {
-        return getOrder().side() == StarkwareOrderSide.BUY ? RoundingMode.UP :RoundingMode.DOWN;
+        return getOrder().getSide() == StarkwareOrderSide.BUY ? RoundingMode.UP :RoundingMode.DOWN;
     }
 
     @Override
     protected String getHumanAmount() {
-        return new BigDecimal(getOrder().humanSize()).
+        return new BigDecimal(getOrder().getHumanSize()).
                 multiply(new BigDecimal(humanPrice)).toString();
     }
 }

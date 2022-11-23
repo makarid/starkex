@@ -64,7 +64,7 @@ public class EcSigner {
         ECDSASigner signer = new ECDSASigner();
         ECPublicKeyParameters publicKeyParameters = curve.createPublicKeyParams(publicKey);
         signer.init(false, publicKeyParameters);
-        return signer.verifySignature(fixMessageLength(message).toByteArray(), signature.r(), signature.s());
+        return signer.verifySignature(fixMessageLength(message).toByteArray(), signature.getR(), signature.getS());
     }
 
 

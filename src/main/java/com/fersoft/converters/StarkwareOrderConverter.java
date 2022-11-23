@@ -33,7 +33,7 @@ public class StarkwareOrderConverter {
     private static final Logger logger = LoggerFactory.getLogger(StarkwareOrderConverter.class);
     private static final double ONE_HOUR_IN_SECONDS = 60 * 60.0;
     private static final Integer STARK_ORDER_SIGNATURE_EXPIRATION_BUFFER_HOURS = 24 * 7;
-    private static final BigInteger MAX_NONCE = BigInteger.TWO.pow(32);
+    private static final BigInteger MAX_NONCE = BigInteger.valueOf(2).pow(32);
 
     /**
      * Creates StarkwareOrder from an OrderWithClientId and networkId
@@ -48,8 +48,8 @@ public class StarkwareOrderConverter {
     public StarkwareOrder fromOrderWithClientId(OrderWithClientId order, NetworkId networkId) throws NoSuchAlgorithmException, QuantumSizeException {
         BigInteger nonce = nonceFromClientId(order.getClientId());
         logger.trace("Generated nonce: {} from client id:{}", nonce, order.getClientId());
-        if (order instanceof OrderWithClientIdWithPrice orderWithPrice) {
-            return fromOrderWithNonce(new OrderWithNonceAndPrice(order.getOrder(), nonce, orderWithPrice.getHumanPrice()), networkId);
+        if (order instanceof OrderWithClientIdWithPrice) {
+            return fromOrderWithNonce(new OrderWithNonceAndPrice(order.getOrder(), nonce, ((OrderWithClientIdWithPrice) order).getHumanPrice()), networkId);
         }
         return fromOrderWithNonce(new OrderWithNonceAndQuoteAmount(order.getOrder(), nonce, ((OrderWithClientIdAndQuoteAmount) order).getHumanQuoteAmount()), networkId);
     }
@@ -83,19 +83,19 @@ public class StarkwareOrderConverter {
         StarkwareAmounts starkwareAmounts = getStarkwareAmounts(order, networkId);
 
         // The limitFee is a fraction, e.g. 0.01 is a 1% fee. It is always paid in the collateral asset.
-        BigInteger quantumsAmountFee = getStarkwareLimitFeeAmount(order.getOrder().limitFee(), starkwareAmounts.quantumsAmountCollateral());
+        BigInteger quantumsAmountFee = getStarkwareLimitFeeAmount(order.getOrder().getLimitFee(), starkwareAmounts.getQuantumsAmountCollateral());
 
         // Convert to a Unix timestamp (in hours) and add buffer to ensure signature is valid on-chain.
         Integer expirationEpochHours =
-                isoTimestampToEpochHours(order.getOrder().expirationIsoTimestamp()) + STARK_ORDER_SIGNATURE_EXPIRATION_BUFFER_HOURS;
-        logger.trace("expirationEpochHours {} from {}", expirationEpochHours, order.getOrder().expirationIsoTimestamp());
+                isoTimestampToEpochHours(order.getOrder().getExpirationIsoTimestamp()) + STARK_ORDER_SIGNATURE_EXPIRATION_BUFFER_HOURS;
+        logger.trace("expirationEpochHours {} from {}", expirationEpochHours, order.getOrder().getExpirationIsoTimestamp());
         return
                 new StarkwareOrder(
                         starkwareAmounts,
                         StarkwareOrderType.LIMIT_ORDER_WITH_FEES,
                         quantumsAmountFee,
-                        starkwareAmounts.assetIdCollateral(),
-                        order.getOrder().positionId(),
+                        starkwareAmounts.getAssetIdCollateral(),
+                        order.getOrder().getPositionId(),
                         order.getNonce(),
                         expirationEpochHours
                 );
@@ -110,17 +110,17 @@ public class StarkwareOrderConverter {
      * @throws QuantumSizeException
      */
     public StarkwareAmounts getStarkwareAmounts(OrderWithNonce order, NetworkId networkId) throws QuantumSizeException {
-        DydxAsset syntheticAsset = order.getOrder().market().getAsset();
+        DydxAsset syntheticAsset = order.getOrder().getMarket().getAsset();
 
         // Convert the synthetic amount to Starkware quantums.
-        BigInteger quantumsAmountSynthetic = order.toQuantums(order.getOrder().humanSize(), syntheticAsset, RoundingMode.DOWN, true);
-        logger.trace("quantumsAmountSynthetic {} from humanSize {} ,syntheticAsset {} ,rounding mode {} ", quantumsAmountSynthetic, order.getOrder().humanSize(), syntheticAsset, RoundingMode.DOWN);
+        BigInteger quantumsAmountSynthetic = order.toQuantums(order.getOrder().getHumanSize(), syntheticAsset, RoundingMode.DOWN, true);
+        logger.trace("quantumsAmountSynthetic {} from humanSize {} ,syntheticAsset {} ,rounding mode {} ", quantumsAmountSynthetic, order.getOrder().getHumanSize(), syntheticAsset, RoundingMode.DOWN);
         return new StarkwareAmounts(
                 quantumsAmountSynthetic,
                 order.toQuantums(),
                 syntheticAsset.getAssetId(),
                 networkId.getCollateralAddressId(),
-                order.getOrder().side() == StarkwareOrderSide.BUY
+                order.getOrder().getSide() == StarkwareOrderSide.BUY
         );
     }
 
