@@ -10,6 +10,8 @@ import com.fersoft.exception.SignException;
 import com.fersoft.types.*;
 import lombok.Getter;
 import lombok.ToString;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.client.ExchangeRestProxyBuilder;
 import org.knowm.xchange.dydx.dydxExchange;
