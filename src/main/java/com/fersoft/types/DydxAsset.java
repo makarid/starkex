@@ -31,7 +31,7 @@ public enum DydxAsset {
     ALGO("ALGO", new BigInteger("414c474f2d36000000000000000000",16),6),
     ZRX("ZRX", new BigInteger("5a52582d3600000000000000000000",16),6),
     XMR("XMR", new BigInteger("584d522d3800000000000000000000",16),8),
-    RUNE("RUNE", new BigInteger("52554e452d36000000000000000000", 16), 10),
+    RUNE("RUNE", new BigInteger("52554e452d36000000000000000000", 16), 6),
     ZEC("ZEC", new BigInteger("5a45432d3800000000000000000000",16),8);
 
     private final String value;
