@@ -28,6 +28,7 @@ public enum DydxMarket {
     ALGO_USD("ALGO-USD", DydxAsset.ALGO),
     ZRX_USD("ZRX-USD", DydxAsset.ZRX),
     XMR_USD("XMR-USD", DydxAsset.XMR),
+    RUNE_USD("RUNE-USD", DydxAsset.RUNE),
     ZEC_USD("ZEC-USD", DydxAsset.ZEC);
 
 

@@ -1,3 +1,4 @@
 /.idea/
 /target/
 /starkex.iml
+/src/test/resources/keys.properties
