@@ -118,7 +118,7 @@ public class StarkwareOrderConverter {
         return new StarkwareAmounts(
                 quantumsAmountSynthetic,
                 order.toQuantums(),
-                syntheticAsset.getAssetId(),
+                syntheticAsset.getSyntheticAssetId(),
                 networkId.getCollateralAddressId(),
                 order.getOrder().getSide() == StarkwareOrderSide.BUY
         );

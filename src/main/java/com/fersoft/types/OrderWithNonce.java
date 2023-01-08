@@ -28,7 +28,7 @@ public abstract class OrderWithNonce {
 
     public BigInteger toQuantums(String humanAmount, DydxAsset asset, RoundingMode roundingMode, boolean throwException) throws QuantumSizeException {
         BigDecimal amount = new BigDecimal(humanAmount);
-        BigDecimal quantumSize = BigDecimal.ONE.divide(BigDecimal.TEN.pow(asset.getResolution()));
+        BigDecimal quantumSize = BigDecimal.ONE.divide(BigDecimal.TEN.pow(asset.getAssetResolution()));
         BigDecimal remainder = amount.remainder(quantumSize);
         if (throwException && remainder.compareTo(BigDecimal.ZERO) != 0) {
             throw new QuantumSizeException(humanAmount, quantumSize);

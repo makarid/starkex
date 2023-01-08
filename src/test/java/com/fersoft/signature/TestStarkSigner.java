@@ -4,13 +4,7 @@ import com.fersoft.exception.FieldExceedMaxException;
 import com.fersoft.exception.HashingException;
 import com.fersoft.exception.QuantumSizeException;
 import com.fersoft.exception.SignException;
-import com.fersoft.types.DydxMarket;
-import com.fersoft.types.NetworkId;
-import com.fersoft.types.Order;
-import com.fersoft.types.OrderWithClientId;
-import com.fersoft.types.OrderWithClientIdAndQuoteAmount;
-import com.fersoft.types.OrderWithClientIdWithPrice;
-import com.fersoft.types.StarkwareOrderSide;
+import com.fersoft.types.*;
 import org.junit.jupiter.api.Test;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -21,7 +15,10 @@ import static org.hamcrest.Matchers.is;
 
 class TestStarkSigner {
     private static final String EXPECTED_SIGNATURE = "06bca455438f4e337e11dff3897d85fdd425be2eb51bd0db92f34527965934e7003376e6726048f2bb23a6f89e7a7528c8cd832493431dd6c685148517ec752f";
-    private static final Order order = new Order("12345", "145.0005", "0.125", DydxMarket.ETH_USD, StarkwareOrderSide.BUY, "2020-09-17T04:15:55.028Z");
+    private final static DydxMarket ETH_USD = new DydxMarket("ETH-USD", new DydxAsset("ETH","0x4554482d3900000000000000000000","1000000000"));
+    private final static DydxMarket ATOM_USD = new DydxMarket("ATOM-USD", new DydxAsset("ATOM","0x41544f4d2d37000000000000000000","10000000"));
+    private final static DydxMarket ZEC_USD = new DydxMarket("ZEC-USD", new DydxAsset("ZEC","0x5a45432d3800000000000000000000","100000000"));
+    private static final Order order = new Order("12345", "145.0005", "0.125", ETH_USD, StarkwareOrderSide.BUY, "2020-09-17T04:15:55.028Z");
     private static final OrderWithClientId orderWithClientID = new OrderWithClientIdWithPrice(order,
             "This is an ID that the client came up with to describe this order", "350.00067");
     private final BigInteger PRIVATE_KEY = new BigInteger("07230d8f6fcba9afb8eea3aa67119b5a1bc117500186c384b5aaee85dafbb64c", 16);
@@ -35,7 +32,7 @@ class TestStarkSigner {
                 new Order("56277",
                         "1",
                         "0.001",
-                        DydxMarket.ATOM_USD,
+                        ATOM_USD,
                         StarkwareOrderSide.BUY,
                         "2021-09-20T00:00:00.000Z"),
                 "123456",
@@ -53,7 +50,7 @@ class TestStarkSigner {
                 new Order("123456",
                         "1.00",
                         "0.0015",
-                        DydxMarket.ZEC_USD,
+                        ZEC_USD,
                         StarkwareOrderSide.SELL,
                         "2021-11-03T16:22:23Z"),
                 "WyHPW57ZKGwcie18UbEBGcry2QervYgYSG1Fm6YG",
